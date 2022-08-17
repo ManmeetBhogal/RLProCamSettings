@@ -1,0 +1,23 @@
+{
+  "name": "rlprocamsettings",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ManmeetBhogal/RLProCamSettings.git"
+  },
+  "author": "Manmeet Bhogal & Ryan Mau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ManmeetBhogal/RLProCamSettings/issues"
+  },
+  "homepage": "https://github.com/ManmeetBhogal/RLProCamSettings#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
