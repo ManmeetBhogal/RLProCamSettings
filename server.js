@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 
-app.get("/", function(request, response){
-    response.send("<h1>Hello maui 1.4gpg</h1>");
+app.get("/", function(req, res){
+    res.sendFile(__dirname + "/index.html");
 });
 
 app.listen(3000, function(){
