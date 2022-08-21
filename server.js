@@ -1,5 +1,5 @@
 const express = require("express");
-const https = require("https");
+const axios = require("axios");
 
 // Authorization key for Ballchasing API Token
 const fs = require("fs");
@@ -9,38 +9,23 @@ const app = express();
 
 app.get("/", function(req, res){
 
-    const options = {
-        hostname: 'ballchasing.com',
-        path: '/api/replays/69055622-3708-42ee-b222-964e432f3d67',
+    const axiosInstance = axios.create({
+        baseURL: "https://ballchasing.com/api"
+      })
+
+      axiosInstance.get('/replays/?uploader=76561199225615730', {
         headers: {
-            Authorization: key
+          Authorization: key
         }
-    };
+      }).then(response => {
+        data = response.data;
+        console.log(data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
 
-    https.get(options, function(response){
-
-        console.log("Response statusCode: " + response.statusCode);
-
-        let data = '';
-        response.on("data", chunk => {
-            data += chunk;
-        });
-        response.on("end", () =>{
-            const apiData = JSON.parse(data);
-            console.log(apiData);
-            const player0Camera = apiData.blue.players[0].camera;
-            res.send(player0Camera);
-        })
-
-        // console.log("Response statusCode: " + response.statusCode);
-
-        // response.on("data", function(data){
-        //     const apiData = JSON.parse(data);
-        //     console.log(apiData);
-        // })
-    })
-
-    // res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/index.html");
 });
 
 app.listen(3000, function(){
