@@ -10,7 +10,6 @@ const app = express();
 app.get("/", function(req, res) {
   callAndWrite(); // calling function on server
 
-
   res.sendFile(__dirname + "/index.html");
 });
 
@@ -37,33 +36,35 @@ async function callAndWrite() {
   // we can pause between API calls to avoid too many requests error (429)
 
 
-  // deleting file contents to ensure blank file
-  await fs.writeFile("./players.txt", "", err => {
-    if (err) {
-      console.log(err);
-    }
-  })
 
 
   axiosInstance.get(reqOne).then(async response => {
     var responseOne = response.data;
     list = await responseOne.list;
+    var done;
+
+    teamArray = [];
+    playerArray = [];
 
     for (value in list) {
       var team = list[value].blue;
       for (value in team) {
         var teamName = team.name;
+        if (teamArray.includes(teamName)) {
+          continue
+        }
+        teamArray.push(teamName);
+
         var teamPlayers = team.players;
         for (player in teamPlayers) {
           var playerName = teamPlayers[player].name;
+          if (playerArray.includes(playerName)) {
+            continue
+          }
+          playerArray.push(playerName);
           var playerID = teamPlayers[player].id;
+
           await console.log(teamName + "," + playerName + "," + playerID.platform + "," + playerID.id + "\n");
-          await fs.appendFile("./players.txt", teamName + "," + playerName + "," + playerID.platform + "," + playerID.id + "\n",
-            err => {
-              if (err) {
-                console.log(err);
-              }
-            });
         }
       }
     };
@@ -71,5 +72,5 @@ async function callAndWrite() {
     console.log(err);
   })
 
-    await timer(600);  // does nothing right now, but will be needed once we start looping API calls
+  await timer(600); // does nothing right now, but will be needed once we start looping API calls
 }
