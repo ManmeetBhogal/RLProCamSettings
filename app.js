@@ -11,33 +11,11 @@ app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
 app.get("/", function(req, res) {
+
   callAndWrite(); // calling function on server
 
-<<<<<<< HEAD:server.js
-  res.sendFile(__dirname + "/index.html");
-=======
-    const axiosInstance = axios.create({
-        baseURL: "https://ballchasing.com/api"
-      })
-
-      axiosInstance.get('/replays/?uploader=76561199225615730', {
-        headers: {
-          Authorization: key
-        }
-      }).then(response => {
-        data = response.data;
-        console.log(data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-      
-    res.render("home");
->>>>>>> main:app.js
-});
-
-app.listen(3000, function() {
-  console.log("Server started on port 3000");
+  // Render home.ejs
+  res.render("home");
 });
 
 const axiosInstance = axios.create({
@@ -51,15 +29,11 @@ const axiosInstance = axios.create({
   }
 })
 
-
-const reqOne = "https://ballchasing.com/api/replays/?uploader=76561199225615730";
-
 async function callAndWrite() {
+
+  const reqOne = "https://ballchasing.com/api/replays/?uploader=76561199225615730";
   const timer = ms => new Promise(res => setTimeout(res, ms)); // created timer that makes it so
   // we can pause between API calls to avoid too many requests error (429)
-
-
-
 
   axiosInstance.get(reqOne).then(async response => {
     var responseOne = response.data;
@@ -96,3 +70,7 @@ async function callAndWrite() {
 
   await timer(600); // does nothing right now, but will be needed once we start looping API calls
 }
+
+app.listen(3000, function() {
+  console.log("Server started on port 3000");
+});
