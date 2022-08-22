@@ -6,11 +6,34 @@ const fs = require("fs");
 var key = fs.readFileSync("./key.txt").toString();
 
 const app = express();
+app.set('view engine', 'ejs');
+
+app.use(express.static("public"));
 
 app.get("/", function(req, res) {
   callAndWrite(); // calling function on server
 
+<<<<<<< HEAD:server.js
   res.sendFile(__dirname + "/index.html");
+=======
+    const axiosInstance = axios.create({
+        baseURL: "https://ballchasing.com/api"
+      })
+
+      axiosInstance.get('/replays/?uploader=76561199225615730', {
+        headers: {
+          Authorization: key
+        }
+      }).then(response => {
+        data = response.data;
+        console.log(data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      
+    res.render("home");
+>>>>>>> main:app.js
 });
 
 app.listen(3000, function() {
