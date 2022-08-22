@@ -41,7 +41,6 @@ async function callAndWrite() {
   axiosInstance.get(reqOne).then(async response => {
     var responseOne = response.data;
     list = await responseOne.list;
-    var done;
 
     teamArray = [];
     playerArray = [];
