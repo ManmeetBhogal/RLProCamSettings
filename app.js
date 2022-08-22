@@ -6,6 +6,9 @@ const fs = require("fs");
 var key = fs.readFileSync("./key.txt").toString();
 
 const app = express();
+app.set('view engine', 'ejs');
+
+app.use(express.static("public"));
 
 app.get("/", function(req, res){
 
@@ -24,8 +27,8 @@ app.get("/", function(req, res){
       .catch(error => {
         console.log(error);
       });
-
-    res.sendFile(__dirname + "/index.html");
+      
+    res.render("home");
 });
 
 app.listen(3000, function(){
