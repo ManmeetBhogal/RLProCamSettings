@@ -31,66 +31,54 @@ const axiosInstance = axios.create({
 
 async function callAndWrite() {
 
-    const reqOne = "https://ballchasing.com/api/replays/?uploader=76561199225615730";
-    const timer = ms => new Promise(res => setTimeout(res, ms)); // created timer that makes it so
-    // we can pause between API calls to avoid too many requests error (429)
 
-    axiosInstance.get(reqOne).then(async response => {
-        var responseOne = response.data;
-        list = await responseOne.list;
+  teamNameArray = [];
+  playerNameArray = [];
+  colorTeamArray = [];
 
-        teamArray = [];
-        playerArray = [];
 
-        for (value in list) {
-          var blueTeam = list[value].blue;
-          var orangeTeam = list[value].orange;
-          for (value in blueTeam) {
-            var blueTeamName = blueTeam.name;
-            if (teamArray.includes(blueTeamName)) {
+  url = "https://ballchasing.com/api/replays/?uploader=76561199225615730";
+  const timer = ms => new Promise(res => setTimeout(res, ms)); // created timer that makes it so
+  // we can pause between API calls to avoid too many requests error (429)
+
+
+  axiosInstance.get(url).then(async response => {
+    var responseOne = response.data;
+    list = await responseOne.list;
+
+
+    for (value in list) {
+      colorTeamArray.push(list[value].blue);
+      colorTeamArray.push(list[value].orange);
+      for (value in colorTeamArray) {
+        var team = colorTeamArray[value];
+        for (value in team) {
+          var teamName = team.name;
+          if (teamNameArray.includes(teamName)) {
+            continue
+          }
+          teamNameArray.push(teamName);
+
+          var teamPlayers = team.players;
+          for (player in teamPlayers) {
+            var playerName = teamPlayers[player].name;
+            if (playerNameArray.includes(playerName)) {
               continue
             }
-            teamArray.push(blueTeamName);
+            playerNameArray.push(playerName);
+            var playerID = teamPlayers[player].id;
 
-            var blueTeamPlayers = blueTeam.players;
-            for (player in blueTeamPlayers) {
-              var bluePlayerName = blueTeamPlayers[player].name;
-              if (playerArray.includes(bluePlayerName)) {
-                continue
-              }
-              playerArray.push(bluePlayerName);
-            var bluePlayerID = blueTeamPlayers[player].id;
-
-            await console.log(blueTeamName + "," + bluePlayerName + "," + bluePlayerID.platform + "," + bluePlayerID.id + "\n");
+            await console.log(teamName + "," + playerName + "," + playerID.platform + "," + playerID.id + "\n");
           }
-            for (value in orangeTeam) {
-              var orangeTeamName = orangeTeam.name;
-              if (teamArray.includes(orangeTeamName)) {
-                continue
-              }
-              teamArray.push(orangeTeamName);
-
-              var orangeTeamPlayers = orangeTeam.players;
-              for (player in orangeTeamPlayers) {
-                var orangePlayerName = orangeTeamPlayers[player].name;
-                if (playerArray.includes(orangePlayerName)) {
-                  continue
-                }
-                playerArray.push(orangePlayerName);
-                var orangePlayerID = orangeTeamPlayers[player].id;
-
-                await console.log(orangeTeamName + "," + orangePlayerName + "," + orangePlayerID.platform + "," + orangePlayerID.id + "\n");
-              }
-            }
-            }
-          };
-        }).catch(err => {
-        console.log(err);
-      })
-
-      await timer(600); // does nothing right now, but will be needed once we start looping API calls
+        }
+      }
     }
+  }).catch(err => {
+    console.log(err);
+  })
+  //await timer(600); // does nothing right now, but will be needed once we start looping API calls
+}
 
-    app.listen(3000, function() {
-      console.log("Server started on port 3000");
-    });
+app.listen(3000, function() {
+  console.log("Server started on port 3000");
+});
